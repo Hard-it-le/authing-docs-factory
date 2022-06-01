@@ -1,7 +1,8 @@
-
+generated/
 demo/
 /swagger-ui*
 globalConfig.json
+openapi.json
 
 # compiled output
 dist/
