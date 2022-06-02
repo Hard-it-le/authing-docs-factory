@@ -26,3 +26,21 @@ exports.filterApisByTag = (paths, tag) =>
         !options?.[method]?.['x-authing-hidden-from-sdk']
     )
   );
+
+exports.getSchema = (schemaName, schemas) => {
+  const schema = schemas[schemaName];
+  schema.name = schemaName;
+  schema.required.forEach((key) => {
+    schema.properties[key].required = true;
+  });
+  Object.keys(schema.properties).forEach((property) => {
+    if (!schema.properties[property].allOf) {
+      return;
+    }
+    schema.properties[property].schema = schema.properties[
+      property
+    ].allOf[0].$ref.replace(/^#\/components\/schemas\//, '');
+  });
+  schema.kv = Object.entries(schema.properties);
+  return schema;
+};
