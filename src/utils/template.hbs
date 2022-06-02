@@ -4,6 +4,13 @@
 
 ## 请求参数
 
+| 名称 | 位置 | 类型 | 必填 | 描述 |
+| ---- | --- | ---- | ---- | ---- |
+{{#each options.parameters}}
+| {{{name}}} | {{{in}}} | {{{ schema.type }}} | {{{required}}} | {{{description}}}。 示例：`{{{example}}}` |
+{{/each}}
+
+
 ## 示例代码
 
 ```{{language}}

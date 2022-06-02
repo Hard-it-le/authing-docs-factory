@@ -15,6 +15,8 @@ exports.generate = async ({ language, path, options, tag, components }) => {
   );
 
   const output = template({ options, language });
+  // console.log(JSON.stringify(options, null, 2));
+  // process.exit(0);
 
   await fs.writeFile(file, output, {
     encoding: 'utf-8'

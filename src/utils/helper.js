@@ -20,5 +20,9 @@ exports.getTags = (tags) =>
 
 exports.filterApisByTag = (paths, tag) =>
   Object.entries(paths).filter(([, options]) =>
-    AVAILABLE_METHODS.some((method) => options?.[method]?.tags.includes(tag))
+    AVAILABLE_METHODS.some(
+      (method) =>
+        options?.[method]?.tags.includes(tag) &&
+        !options?.[method]?.['x-authing-hidden-from-sdk']
+    )
   );
