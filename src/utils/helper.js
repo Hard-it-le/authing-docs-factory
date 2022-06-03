@@ -33,17 +33,40 @@ exports.getSchemaName = (schema) =>
 exports.getSchema = (schemaName, schemas) => {
   const schema = schemas[schemaName];
   schema.name = schemaName;
-  schema.required.forEach((key) => {
+  (schema?.required || []).forEach((key) => {
     schema.properties[key].required = true;
   });
   Object.keys(schema.properties).forEach((property) => {
-    if (!schema.properties[property].allOf) {
-      return;
+    if (Array.isArray(schema.properties[property].example)) {
+      schema.properties[property].example = JSON.stringify(
+        schema.properties[property].example
+      );
     }
-    schema.properties[property].schema = this.getSchemaName(
-      schema.properties[property].allOf[0]
-    );
+    if (schema.properties[property].allOf) {
+      schema.properties[property].schema = this.getSchemaName(
+        schema.properties[property].allOf[0]
+      );
+    }
   });
-  schema.kv = Object.entries(schema.properties);
   return schema;
+};
+
+exports.getSchemaModels = (schemaName, schemas) => {
+  if (!schemaName) {
+    return [];
+  }
+  const result = [];
+  const schema = schemas[schemaName];
+  Object.keys(schema.properties).forEach((property) => {
+    if (schema.properties[property].allOf) {
+      const childSchemaName = this.getSchemaName(
+        schema.properties[property].allOf[0]
+      );
+      result.push(childSchemaName);
+      // getChildrenModels
+      const childModels = this.getSchemaModels(childSchemaName, schemas);
+      result.push(...childModels);
+    }
+  });
+  return Array.from(new Set(result));
 };

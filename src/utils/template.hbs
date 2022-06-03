@@ -4,17 +4,17 @@
 
 ## 请求参数
 
+| 名称 | 位置 | 类型 | 必填 |默认值| 描述 |
+| ---- | --- | ---- | ---- | --- | ---- |
 {{#if options.parameters}}
-| 名称 | 位置 | 类型 | 必填 | 描述 |
-| ---- | --- | ---- | ---- | ---- |
 {{#each options.parameters}}
-| {{{name}}} | {{{in}}} | {{{ schema.type }}} | {{{required}}} | {{{description}}}。 示例：`{{{example}}}` |
+| {{{name}}} | {{{in}}} | {{{ schema.type }}} | {{#if required}}\*{{/if}} | {{{schema.default}}} | {{{description}}}。{{#if schema.enum}}枚举值：{{#each schema.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}示例：`{{{example}}}` {{/if}} |
 {{/each}}
 {{/if}}
 {{#if request}}
-|  位置 | 类型 | 必填  |
-|  --- | ---- | ---- |
-|  body | <a href="#{{{request.name}}}">{{{request.name}}}</a> | {{{request.required}}} |
+{{#each request.properties}}
+| {{{@key}}} | body| {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{#if this.required}}\*{{/if}} | {{{this.default}}} | {{{this.description}}}。{{#if this.enum}}枚举值：{{#each this.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}示例：`{{{this.example}}}` {{/if}}  |
+{{/each}}
 {{/if}}
 
 ## 示例代码
@@ -29,8 +29,8 @@
 
 | 名称 | 类型 | 描述 |
 | ---- | ---- | ---- |
-{{#each response.kv}}
-| {{{0}}} | {{#if 1.type }}{{{ 1.type }}}{{else}}<a href="#{{{1.schema}}}">{{{1.schema}}}</a>{{/if}} | {{{1.description}}} |
+{{#each response.properties}}
+| {{{@key}}} | {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{{this.description}}} |
 {{/each}}
 
 
@@ -39,3 +39,13 @@
 
 
 ## 数据结构
+
+{{#each models}}
+### <a id="{{name}}"></a> {{ name }}
+
+| 名称 | 类型 | 必填 |默认值| 描述 |
+| ---- |  ---- | ---- | --- | ---- |
+{{#each properties}}
+| {{{@key}}} | {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{#if this.required}}\*{{/if}} | {{{this.default}}} | {{{this.description}}}。{{#if this.enum}}枚举值：{{#each this.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}示例：`{{{this.example}}}` {{/if}}  |
+{{/each}}
+{{/each}}
