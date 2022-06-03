@@ -13,7 +13,7 @@
 {{/if}}
 {{#if request}}
 {{#each request.properties}}
-| {{{@key}}} | body| {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{#if this.required}}\*{{/if}} | {{{this.default}}} | {{{this.description}}}。{{#if this.enum}}枚举值：{{#each this.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}示例：`{{{this.example}}}` {{/if}}  |
+| {{{@key}}} | body| {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{#if this.required}}\*{{/if}} | {{{this.default}}} | {{{this.description}}}。{{#if this.enum}}枚举值：{{#each this.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}{{#if this.example}}示例：`{{{this.example}}}` {{/if}} {{/if}}  |
 {{/each}}
 {{/if}}
 
@@ -48,6 +48,7 @@
 | 名称 | 类型 | 必填 |默认值| 描述 |
 | ---- |  ---- | ---- | --- | ---- |
 {{#each properties}}
-| {{{@key}}} | {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{#if this.required}}\*{{/if}} | {{{this.default}}} | {{{this.description}}}。{{#if this.enum}}枚举值：{{#each this.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}示例：`{{{this.example}}}` {{/if}}  |
+| {{{@key}}} | {{#if this.type }}{{{ this.type }}}{{else}}<a href="#{{{this.schema}}}">{{{this.schema}}}</a>{{/if}} | {{#if this.required}}\*{{/if}} | {{{this.default}}} | {{{this.description}}}。{{#if this.enum}}枚举值：{{#each this.enum}}`{{{this}}}`{{#unless @last}}，{{/unless}}{{/each}}。{{else}}{{#if this.example}}示例：`{{{this.example}}}` {{/if}}{{/if}}  |
 {{/each}}
+
 {{/each}}

@@ -57,11 +57,11 @@ exports.getSchemaModels = (schemaName, schemas) => {
   }
   const result = [];
   const schema = schemas[schemaName];
-  Object.keys(schema.properties).forEach((property) => {
-    if (schema.properties[property].allOf) {
-      const childSchemaName = this.getSchemaName(
-        schema.properties[property].allOf[0]
-      );
+  Object.entries(schema.properties).forEach(([property, opts]) => {
+    if (opts.allOf || (opts.items && opts.items.$ref)) {
+      const childSchemaName = opts.allOf
+        ? this.getSchemaName(opts.allOf[0])
+        : this.getSchemaName(opts.items);
       result.push(childSchemaName);
       // getChildrenModels
       const childModels = this.getSchemaModels(childSchemaName, schemas);
