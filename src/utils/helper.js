@@ -27,6 +27,9 @@ exports.filterApisByTag = (paths, tag) =>
     )
   );
 
+exports.getSchemaName = (schema) =>
+  schema?.$ref.replace(/^#\/components\/schemas\//, '');
+
 exports.getSchema = (schemaName, schemas) => {
   const schema = schemas[schemaName];
   schema.name = schemaName;
@@ -37,9 +40,9 @@ exports.getSchema = (schemaName, schemas) => {
     if (!schema.properties[property].allOf) {
       return;
     }
-    schema.properties[property].schema = schema.properties[
-      property
-    ].allOf[0].$ref.replace(/^#\/components\/schemas\//, '');
+    schema.properties[property].schema = this.getSchemaName(
+      schema.properties[property].allOf[0]
+    );
   });
   schema.kv = Object.entries(schema.properties);
   return schema;

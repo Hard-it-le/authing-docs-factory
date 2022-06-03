@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const { join } = require('path');
 const Handlebars = require('handlebars');
-const { getSchema } = require('./helper');
+const { getSchema, getSchemaName } = require('./helper');
 
 exports.generate = async ({ language, path, options, tag, components }) => {
   const template = Handlebars.compile(
@@ -16,12 +16,12 @@ exports.generate = async ({ language, path, options, tag, components }) => {
   );
 
   const { requestBody, responses } = options;
-  const schemaNameReq = requestBody?.content[
-    'application/json'
-  ].schema.$ref.replace(/^#\/components\/schemas\//, '');
-  const schemaNameRes = responses['200'].content[
-    'application/json'
-  ].schema.$ref.replace(/^#\/components\/schemas\//, '');
+  const schemaNameReq = getSchemaName(
+    requestBody?.content['application/json'].schema
+  );
+  const schemaNameRes = getSchemaName(
+    responses['200'].content['application/json'].schema
+  );
 
   const output = template({
     options,
