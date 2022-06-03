@@ -1,7 +1,12 @@
 const fs = require('fs/promises');
 const { join } = require('path');
 const Handlebars = require('handlebars');
-const { getSchema, getSchemaName, getSchemaModels } = require('./helper');
+const {
+  getSchema,
+  getSchemaName,
+  getSchemaModels,
+  getExampleJson
+} = require('./helper');
 
 exports.generate = async ({ language, path, options, tag, components }) => {
   const template = Handlebars.compile(
@@ -36,7 +41,14 @@ exports.generate = async ({ language, path, options, tag, components }) => {
         }
       : {}),
     ...(responses
-      ? { response: getSchema(schemaNameRes, components.schemas) }
+      ? {
+          response: getSchema(schemaNameRes, components.schemas),
+          responseJson: JSON.stringify(
+            getExampleJson(schemaNameRes, components.schemas),
+            null,
+            2
+          )
+        }
       : {})
   });
   // console.log(JSON.stringify(options, null, 2));

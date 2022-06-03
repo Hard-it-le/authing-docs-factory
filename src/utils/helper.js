@@ -70,3 +70,26 @@ exports.getSchemaModels = (schemaName, schemas) => {
   });
   return Array.from(new Set(result));
 };
+
+exports.getExampleJson = (schemaName, schemas) => {
+  const result = {};
+  const schema = schemas[schemaName];
+  Object.entries(schema.properties).forEach(([property, opts]) => {
+    if (opts.allOf) {
+      result[property] = this.getExampleJson(
+        this.getSchemaName(schema.properties[property].allOf[0]),
+        schemas
+      );
+    }
+    if (opts.items && opts.items.$ref) {
+      result[property] = this.getExampleJson(
+        this.getSchemaName(schema.properties[property].items),
+        schemas
+      );
+    }
+    if (opts.example || opts.default) {
+      result[property] = opts.example || opts.default;
+    }
+  });
+  return result;
+};
