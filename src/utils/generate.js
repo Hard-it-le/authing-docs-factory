@@ -12,6 +12,12 @@ exports.generate = async ({ language, path, options, tag, components }) => {
   const template = Handlebars.compile(
     await fs.readFile(join(__dirname, 'template.hbs'), 'utf-8')
   );
+  const templateCode = Handlebars.compile(
+    await fs.readFile(
+      join(__dirname, '../templates', `${language}.hbs`),
+      'utf-8'
+    )
+  );
   const file = join(
     __dirname,
     '../../generated',
@@ -31,9 +37,24 @@ exports.generate = async ({ language, path, options, tag, components }) => {
     ...getSchemaModels(schemaNameReq, components.schemas),
     ...getSchemaModels(schemaNameRes, components.schemas)
   ].map((name) => getSchema(name, components.schemas));
+
+  const exampleCode = templateCode({
+    options,
+    fnNameCamel: path
+      .replace('/api/v3/', '')
+      .replace(/-(.)/g, ($1) => $1.toUpperCase())
+      .replace(/-/g, ''),
+    fnNameSnake: path.replace('/api/v3/', '').replace(/-/g, '_'),
+    ...(requestBody
+      ? {
+          request: getSchema(schemaNameReq, components.schemas)
+        }
+      : {}),
+    schemas: components.schemas
+  });
   const output = template({
     options,
-    language,
+    exampleCode,
     models,
     ...(requestBody
       ? {

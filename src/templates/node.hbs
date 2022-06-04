@@ -1,0 +1,27 @@
+```ts
+import { ManagementClient } from 'authing-node-sdk';
+// 在 Node.js 中引用：
+// const { ManagementClient } = require('authing-node-sdk');
+
+const managementClient = new ManagementClient({
+  accessKeyId: 'AUTHING_USERPOOL_ID',
+  accessKeySecret: 'AUTHING_USERPOOL_SECRET',
+});
+
+(async () => {
+  const result = await managementClient.{{{fnNameCamel}}}(
+    {
+{{#if options.parameters}}
+{{#each options.parameters}}
+      '{{name}}': '{{#if example}}{{{example}}}{{else}}{{#if default}}{{{default}}}{{else}}{{{type}}}{{/if}}{{/if}}',
+{{/each}}
+{{/if}}
+{{#if request}}
+{{#each request.properties}}
+      '{{{@key}}}': '{{#if this.example}}{{{this.example}}}{{else}}{{#if this.default}}{{{this.default}}}{{else}}{{{this.type}}}{{/if}}{{/if}}'
+{{/each}}
+{{/if}}
+    }
+  )
+})();
+```

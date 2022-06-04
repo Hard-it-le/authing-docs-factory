@@ -7,8 +7,8 @@ const AVAILABLE_METHODS = ['get', 'post', 'put', 'delete', 'patch'];
 exports.getLanguages = async () => {
   const files = await fs.readdir(path.join(__dirname, '../templates'));
   return files
-    .filter((file) => file.endsWith('.js') && file !== 'index.js')
-    .map((file) => file.replace(/\.js$/, ''));
+    .filter((file) => file.endsWith('.hbs'))
+    .map((file) => file.replace(/\.hbs$/, ''));
 };
 
 exports.getTags = (tags) =>
@@ -31,6 +31,7 @@ exports.getSchemaName = (schema) =>
   schema?.$ref.replace(/^#\/components\/schemas\//, '');
 
 exports.getSchema = (schemaName, schemas) => {
+  if (!schemaName) return;
   const schema = schemas[schemaName];
   schema.name = schemaName;
   (schema?.required || []).forEach((key) => {
