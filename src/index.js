@@ -16,6 +16,37 @@ async function main() {
   });
   const languages = await getLanguages();
   const tags = getTags(spec.tags);
+  // Generate Sidebar
+  await fs.mkdir(DIR, { recursive: true });
+  const sidebar = {};
+  for (const language of languages) {
+    const category = `/reference-new/sdk/${language}/`;
+    sidebar[category] = {
+      title: language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
+      collapsable: false,
+      children: []
+    };
+    for (const tag of tags) {
+      const subCategory = {
+        title: tag.name,
+        path: `${category}${tag.path}/`,
+        children: []
+      };
+      const apis = filterApisByTag(spec.paths, tag.name);
+      for (const [path] of apis) {
+        subCategory.children.push(
+          `${subCategory.path}${path.replace(/^\/api\/v3\//, '')}`
+        );
+      }
+      sidebar[category].children.push(subCategory);
+    }
+  }
+  await fs.writeFile(
+    join(DIR, 'sidebar.json'),
+    JSON.stringify(sidebar, null, 2),
+    { encoding: 'utf-8' }
+  );
+  // Generate Docs
   for (const language of languages) {
     for (const tag of tags) {
       // Create directory
