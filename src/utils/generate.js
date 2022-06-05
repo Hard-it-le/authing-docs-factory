@@ -8,6 +8,10 @@ const {
   getExampleJson
 } = require('./helper');
 
+Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+  return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+});
+
 exports.generate = async ({ language, path, options, tag, components }) => {
   const template = Handlebars.compile(
     await fs.readFile(join(__dirname, 'template.hbs'), 'utf-8')
