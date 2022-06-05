@@ -10,18 +10,15 @@ const managementClient = new ManagementClient({
 
 (async () => {
   const result = await managementClient.{{{fnNameCamel}}}(
-    {
 {{#if options.parameters}}
+    {
 {{#each options.parameters}}
       {{name}}: {{#ifEquals schema.type 'string'}}'{{/ifEquals}}{{#if example}}{{{example}}}{{else}}{{#if default}}{{{default}}}{{else}}{{{type}}}{{/if}}{{/if}}{{#ifEquals schema.type 'string'}}'{{/ifEquals}},
 {{/each}}
+    });
 {{/if}}
 {{#if request}}
-{{#each request.properties}}
-      {{{@key}}}: {{#ifEquals this.type 'string'}}'{{/ifEquals}}{{#if this.example}}{{{this.example}}}{{else}}{{#if this.default}}{{{this.default}}}{{else}}{{{this.type}}}{{/if}}{{/if}}{{#ifEquals this.type 'string'}}'{{/ifEquals}},
-{{/each}}
+    {{{ request }}});
 {{/if}}
-    }
-  )
 })();
 ```

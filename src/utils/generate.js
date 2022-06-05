@@ -5,7 +5,8 @@ const {
   getSchema,
   getSchemaName,
   getSchemaModels,
-  getExampleJson
+  getExampleJson,
+  getSchemaParams
 } = require('./helper');
 
 Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
@@ -51,7 +52,11 @@ exports.generate = async ({ language, path, options, tag, components }) => {
     fnNameSnake: path.replace('/api/v3/', '').replace(/-/g, '_'),
     ...(requestBody
       ? {
-          request: getSchema(schemaNameReq, components.schemas)
+          request: JSON.stringify(
+            getSchemaParams(schemaNameReq, components.schemas),
+            null,
+            3
+          ).replace(/ /g, '\t')
         }
       : {}),
     schemas: components.schemas

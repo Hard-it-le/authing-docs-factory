@@ -47,6 +47,12 @@ exports.getSchema = (schemaName, schemas) => {
       schema.properties[property].schema = this.getSchemaName(
         schema.properties[property].allOf[0]
       );
+    } else if (schema.properties[property].items) {
+      if (schema.properties[property].items.$ref) {
+        schema.properties[property].schema = this.getSchemaName(
+          schema.properties[property].items
+        );
+      }
     }
   });
   return schema;
@@ -58,7 +64,7 @@ exports.getSchemaModels = (schemaName, schemas) => {
   }
   const result = [];
   const schema = schemas[schemaName];
-  Object.entries(schema.properties).forEach(([property, opts]) => {
+  Object.entries(schema.properties).forEach(([, opts]) => {
     if (opts.allOf || (opts.items && opts.items.$ref)) {
       const childSchemaName = opts.allOf
         ? this.getSchemaName(opts.allOf[0])
@@ -70,6 +76,39 @@ exports.getSchemaModels = (schemaName, schemas) => {
     }
   });
   return Array.from(new Set(result));
+};
+
+exports.getSchemaParams = (schemaName, schemas) => {
+  const schema = this.getSchema(schemaName, schemas);
+  if (!schema) return;
+  const result = {};
+  Object.entries(schema.properties).forEach(([property, opts]) => {
+    if (typeof opts.example !== 'undefined') {
+      result[property] = opts.example;
+    } else if (typeof opts.default !== 'undefined') {
+      result[property] = opts.default;
+    } else if (opts.allOf) {
+      result[property] = this.getSchemaParams(
+        this.getSchemaName(schema.properties[property].allOf[0]),
+        schemas
+      );
+    } else if (opts.items) {
+      if (opts.items.$ref) {
+        result[property] = [
+          this.getSchemaParams(
+            this.getSchemaName(schema.properties[property].items),
+            schemas
+          )
+        ];
+      } else {
+        result[property] = ['string'];
+      }
+    } else {
+      // Others
+      result[property] = null;
+    }
+  });
+  return result;
 };
 
 exports.getExampleJson = (schemaName, schemas) => {
