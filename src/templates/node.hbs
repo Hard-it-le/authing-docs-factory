@@ -18,7 +18,7 @@ const managementClient = new ManagementClient({
 {{/if}}
 {{#if request}}
 {{#each request.properties}}
-      {{{@key}}}: {{#ifEquals this.type 'string'}}'{{/ifEquals}}{{#if this.example}}{{{this.example}}}{{else}}{{#if this.default}}{{{this.default}}}{{else}}{{{this.type}}}{{/if}}{{/if}}{{#ifEquals this.type 'string'}}'{{/ifEquals}}
+      {{{@key}}}: {{#ifEquals this.type 'string'}}'{{/ifEquals}}{{#if this.example}}{{{this.example}}}{{else}}{{#if this.default}}{{{this.default}}}{{else}}{{{this.type}}}{{/if}}{{/if}}{{#ifEquals this.type 'string'}}'{{/ifEquals}},
 {{/each}}
 {{/if}}
     }
