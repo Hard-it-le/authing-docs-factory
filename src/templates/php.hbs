@@ -1,0 +1,24 @@
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Authing\ManagementClient;
+
+$management = new ManagementClient(
+    "AUTHING_USERPOOL_ID",
+    "AUTHING_USERPOOL_SECRET"
+);
+
+$data = $management->{{{fnNameCamel}}}(array(
+    {{#if options.parameters}}
+    {{#each options.parameters}}
+    "{{name}}" => {{#ifEquals schema.type 'string'}}"{{/ifEquals}}{{#if example}}{{{example}}}{{else}}{{#if default}}{{{default}}}{{else}}{{{type}}}{{/if}}{{/if}}{{#ifEquals schema.type 'string'}}"{{/ifEquals}},
+    {{/each}}
+    {{/if}}
+    {{#if request}}
+    "userId" => "xxx",
+    "appIds" => array("xxx")
+    {{/if}}
+));
+```
