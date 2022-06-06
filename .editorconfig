@@ -11,3 +11,6 @@ insert_final_newline = true
 
 [Makefile]
 indent_style = tab
+
+[*.ejs]
+insert_final_newline= false

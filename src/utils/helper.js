@@ -5,10 +5,10 @@ const path = require('path');
 const AVAILABLE_METHODS = ['get', 'post', 'put', 'delete', 'patch'];
 
 exports.getLanguages = async () => {
-  const files = await fs.readdir(path.join(__dirname, '../templates'));
+  const files = await fs.readdir(path.join(__dirname, '../templates/sdk'));
   return files
-    .filter((file) => file.endsWith('.hbs'))
-    .map((file) => file.replace(/\.hbs$/, ''));
+    .filter((file) => file.endsWith('.ejs'))
+    .map((file) => file.replace(/\.ejs$/, ''));
 };
 
 exports.getTags = (tags) =>
@@ -76,39 +76,6 @@ exports.getSchemaModels = (schemaName, schemas) => {
     }
   });
   return Array.from(new Set(result));
-};
-
-exports.getSchemaParams = (schemaName, schemas) => {
-  const schema = this.getSchema(schemaName, schemas);
-  if (!schema) return;
-  const result = {};
-  Object.entries(schema.properties).forEach(([property, opts]) => {
-    if (typeof opts.example !== 'undefined') {
-      result[property] = opts.example;
-    } else if (typeof opts.default !== 'undefined') {
-      result[property] = opts.default;
-    } else if (opts.allOf) {
-      result[property] = this.getSchemaParams(
-        this.getSchemaName(schema.properties[property].allOf[0]),
-        schemas
-      );
-    } else if (opts.items) {
-      if (opts.items.$ref) {
-        result[property] = [
-          this.getSchemaParams(
-            this.getSchemaName(schema.properties[property].items),
-            schemas
-          )
-        ];
-      } else {
-        result[property] = ['string'];
-      }
-    } else {
-      // Others
-      result[property] = null;
-    }
-  });
-  return result;
 };
 
 exports.getExampleJson = (schemaName, schemas) => {
