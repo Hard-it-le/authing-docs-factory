@@ -1,0 +1,19 @@
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Authing\ManagementClient;
+
+$management = new ManagementClient(
+    "AUTHING_USERPOOL_ID",
+    "AUTHING_USERPOOL_SECRET"
+);
+
+$data = $management-><%- fnNameCamel %>(array(
+  <% options.parameters.forEach((p)=>{%>
+    "<%- p.name %>" => <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}` %>,
+<%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/php_params', {key,p,models}) %>
+<%}); %><% } %> });
+));
+```

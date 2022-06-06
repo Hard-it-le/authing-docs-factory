@@ -1,0 +1,18 @@
+<%
+  if( p.type === 'array' && p.items.$ref ) {
+    const schema = models.find(x=>x.name===p.schema);
+    if(!schema) return;
+    %>    <%- key %>: [{
+        <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('node_params', {key,p,models}) %>
+      <%}); %>}],<%
+  } else if(p.allOf) {
+    const schema = models.find(x=>x.name===p.schema);
+    if(!schema) return;
+    %>    <%- key %>: {
+      <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('node_params', {key,p,models}) %>
+    <%}); %>},<%
+  }
+  else {
+    %>    <%- key %>: <%- `${p.type==='string'||p?.items?.type==='string'?"'":''}${typeof p.example==='object'? JSON.stringify(p.example, null, 3).replace(/ /g, '\t').replace(/}$/,'\t\t}') : p.example??p.default}${p.type==='string'||p?.items?.type==='string'?"'":''}` %>,<%
+  }
+%>
