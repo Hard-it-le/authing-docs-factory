@@ -13,6 +13,6 @@
     <%}); %>)<%
   }
   else {
-    %>    "<%- key %>" => <%- `${p.type==='string'||p?.items?.type==='string'?'"':''}${typeof p.example==='object'? JSON.stringify(p.example, null, 3).replace(/ /g, '\t').replace(/}$/,'\t\t}') : p.example??p.default}${p.type==='string'||p?.items?.type==='string'?'"':''}` %>,<%
+    %>    "<%- key %>" => <%- `${p.type==='string'||p?.items?.type==='string'?'"':''}${typeof p.example==='object'? JSON.stringify(p.example, null, 3).replace(/ /g, '\t').replace(/}$/,'\t\t}') : p.example??p.default}${p.type==='string'||p?.items?.type==='string'?'"':''}` %><%
   }
 %>
