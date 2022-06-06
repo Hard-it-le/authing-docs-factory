@@ -70,25 +70,27 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
   const sidebar = {};
   for (const language of languages) {
     const category = `/reference-new/sdk/${language}/`;
-    sidebar[category] = {
-      title: language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
-      collapsable: false,
-      children: []
-    };
+    sidebar[category] = [
+      {
+        title: language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
+        collapsable: false,
+        children: []
+      }
+    ];
     for (const tag of tags) {
       const subCategory = {
         title: tag.name,
-        path: `${category}${tag.path}/`,
+        // path: `${category}${tag.path}/`,
         children: []
       };
       const apis = filterApisByTag(paths, tag.name);
       for (const [path] of apis) {
         subCategory.children.push(
-          `${subCategory.path}${path.replace(/^\/api\/v3\//, '')}`
+          `${category}${tag.path}/${path.replace(/^\/api\/v3\//, '')}`
         );
       }
       if (subCategory.children.length > 0) {
-        sidebar[category].children.push(subCategory);
+        sidebar[category][0].children.push(subCategory);
       }
     }
   }
