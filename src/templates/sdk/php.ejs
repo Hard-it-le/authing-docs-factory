@@ -10,15 +10,10 @@ $management = new ManagementClient(
     "AUTHING_USERPOOL_SECRET"
 );
 
-$data = $management->{{{fnNameCamel}}}(array(
-    {{#if options.parameters}}
-    {{#each options.parameters}}
-    "{{name}}" => {{#ifEquals schema.type 'string'}}"{{/ifEquals}}{{#if example}}{{{example}}}{{else}}{{#if default}}{{{default}}}{{else}}{{{type}}}{{/if}}{{/if}}{{#ifEquals schema.type 'string'}}"{{/ifEquals}},
-    {{/each}}
-    {{/if}}
-    {{#if request}}
-    "userId" => "xxx",
-    "appIds" => array("xxx")
-    {{/if}}
+$data = $management-><%- fnNameCamel %>(array(
+  <% options.parameters.forEach((p)=>{%>
+    "<%- p.name %>" => <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}` %>,
+<%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/php_params', {key,p,models}) %>
+<%}); %><% } %> });
 ));
 ```
