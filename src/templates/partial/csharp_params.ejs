@@ -1,0 +1,79 @@
+<%
+  if( p.type === 'array' && p.items.$ref ) {
+    const schema = models.find(x=>x.name===p.schema);
+    if(!schema) return;
+    %><%name=schema.name%>    <%- getName(key) %>= new List<<%- p.schema  %>>
+                {
+                    new <%- p.schema %>
+                    {
+               <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('csharp_params', {key,p,models}) -%>
+      <%}); %>          }
+                  },<%
+  } else if(p.allOf) {
+    const schema = models.find(x=>x.name===p.schema);
+    name=  schema.name;
+    if(!schema) return;
+    %>    <%- getName(key) %>= new <%- p.schema  %>
+                {
+                    <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('csharp_params', {key,p,models,name}) -%>
+    <%}); %>    },<%
+  }
+  else {
+    %>      <%- getName(key) %>= <%- getExample(p,key,name)-%> ,<%}
+%>
+<% function getName(str){ return str.charAt(0).toUpperCase() + str.slice(1);} -%>
+<% function getExample(pp,keyValue,schema){
+    if(pp.type==='array')
+    {
+        let result="new List<string>";
+        let list="{";
+        if(typeof(pp.example)==='undefined'){
+        }
+        else{
+          JSON.parse(pp.example).forEach(item=>{
+            list+="\""+item+"\",";
+          });
+        }
+        list+="}";
+        return result+list;
+    }
+    else if(typeof(pp.example)==='object'){
+      let str="{";
+      Object.keys(pp.example).forEach((item)=>{
+           if(typeof pp.example[item]==="string"){
+            str+="    "+item+"="+"\""+pp.example[item]+"\""+",";
+           }
+           else if(typeof pp.example[item]==="number"){
+            str+="    "+item+"="+pp.example[item]+",";
+           }
+      });
+      str+="}";
+      return "new "+str;
+    }
+    else if(pp.type==='string'){
+      //如果是枚举
+      if(typeof(pp.enum)!='undefined'){
+        if(typeof(pp.example!='undefined'))
+        {
+        return schema+"."+keyValue+"."+pp.example.toUpperCase();
+        }
+        else if(typeof(pp.default!='undefined')){
+          return schema+"."+keyValue+"."+pp.default.toUpperCase();
+        }
+      }else{
+      }
+      return  "\""+ pp.example+"\"";
+    }
+    else if(pp.type==='boolean'){
+      return pp.example??pp.default;
+    }
+    else
+    {
+      return pp.example??pp.default;
+    }
+  }
+
+  function ConvertToList(params) {
+    return JSON.parse(params);
+  }
+-%>
