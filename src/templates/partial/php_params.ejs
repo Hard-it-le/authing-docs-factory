@@ -2,9 +2,12 @@
   if( p.type === 'array' && p.items.$ref ) {
     const schema = models.find(x=>x.name===p.schema);
     if(!schema) return;
-    %>    "<%- key %>" => array(array(
+    %>    "<%- key %>" => array(
+      array(
         <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('php_params', {key,p,models}) %>,
-      <%}); %>))<%
+      <%}); %>
+      )
+    )<%
   } else if(p.allOf) {
     const schema = models.find(x=>x.name===p.schema);
     if(!schema) return;
@@ -13,6 +16,20 @@
     <%}); %>)<%
   }
   else {
-    %>    "<%- key %>" => <%- `${p.type==='string'||p?.items?.type==='string'?'"':''}${typeof p.example==='object'? JSON.stringify(p.example, null, 3).replace(/ /g, '\t').replace(/}$/,'\t\t}') : p.example??p.default}${p.type==='string'||p?.items?.type==='string'?'"':''}` %><%
+    if(typeof p.example==='object'){
+      example = JSON.stringify(p.example, null, 3)
+      example = example.replace(/:/g,'=>')
+      example = example.replace(/{/g,'array(')
+      example = example.replace(/}/g,')')
+    }else if(typeof p.example==='string' && (p.example??p.default).indexOf('[') != -1 ){
+      example = p.example??p.default
+      example = example.replace('[','array(')
+      example = example.replace(']',')')
+      p.type = 'array'
+      p.items.type = 'array'
+    }else{
+      example = p.example??p.default
+    }
+    %>    "<%- key %>" => <%- `${p.type==='string'||p?.items?.type==='string'?'"':''}${example}${p.type==='string'||p?.items?.type==='string'?'"':''}` %><%
   }
 %>
