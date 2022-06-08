@@ -3,13 +3,13 @@
     const schema = models.find(x=>x.name===p.schema);
     if(!schema) return;
     %>    "<%- key %>" => array(array(
-        <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('php_params', {key,p,models}) %>
+        <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('php_params', {key,p,models}) %>,
       <%}); %>))<%
   } else if(p.allOf) {
     const schema = models.find(x=>x.name===p.schema);
     if(!schema) return;
     %>    "<%- key %>" => array(
-      <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('php_params', {key,p,models}) %>
+      <% Object.entries(schema.properties).forEach(function([key,p]){ %><%- include('php_params', {key,p,models}) %>,
     <%}); %>)<%
   }
   else {
