@@ -74,7 +74,12 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
       {
         title: language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
         collapsable: false,
-        children: []
+        children: [
+          {
+            title: '安装使用',
+            path: category
+          }
+        ]
       }
     ];
     for (const tag of tags) {
