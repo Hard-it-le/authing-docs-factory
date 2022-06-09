@@ -31,18 +31,35 @@ namespace Example
 
           ManagementClient managementClient = new ManagementClient(options);
         <% let a=0 %><% let name="" %><%  if(request){name=request.name} %>
-          var result = await managementClient.<%- getName(fnNameCamel) %>
-          (
-            <% if (request) { %>  new <%- request.name %>{<% } %>
+          <%- response.name %>  result = await managementClient.<%- ConvertFirstCharUpper(fnNameCamel) %>
+          (<% if (request) { %>  new <%- request.name -%>{<% } -%>
             <%  options.parameters.forEach((p)=>{%> <% a++ %>
-                <%-p.name%>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>
-                <% if(a<options.parameters.length){%>,<%}%><%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/csharp_params', {key,p,models,name}) -%>
+                <%-convertKeyWord(p.name)%>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${getParammeterValue(p)}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>
+<% if(a<options.parameters.length){%>,<%}%><%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/csharp_params', {key,p,models,name}) -%>
             <%}); %><% }%><% if(request){%>}<%}%>
           );
         }
     }
 }
-<% function getName(str){ return str.charAt(0).toUpperCase() + str.slice(1);} %>
-<% function returnStr(total,current){console.log("ssss");return ';;;;;;';} %>
-
+<% function convertKeyWord(str){ if(str=="namespace"){return "nameSpace"}else{return str}} %>
+<% function ConvertFirstCharUpper(str){ return str.charAt(0).toUpperCase() + str.slice(1);} -%>
+<% function getParammeterValue(param){
+  if(typeof param.example==='undefined'){
+     if(param.default!=null){
+       return param.default;
+     }
+     else{
+       if(param.schema!=null){
+         return param.schema.default;
+       }
+       else
+       {
+         //需要根据数据类型返回默认值
+       }
+     }
+  }
+  else{
+    return param.example;
+  }
+} -%>
 ```
