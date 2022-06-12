@@ -13,8 +13,8 @@
 
 | 名称 | 类型 | 必填 | 默认值 | 描述 |
 | ---- | ---- | ---- | ---- | ---- |
-<% if (options.parameters) { %><% options.parameters.forEach(function(p){ %>| <%- p.name %> | <%- p.schema.type %>  | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.schema.default %> | <%- p.description %>。 <% if(p.schema.enum) { %>枚举值：<%= p.schema.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- p.example %>`<% } %> |
-<% }); %><% } %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %>| <%- key %> | <% if(p.type) { %><%- p.type %><% } else { %><a href="#<%- p.schema %>"><%- p.schema %></a><% } %> | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.default %> | <%- p.description %>。 <% if(p.enum) { %>枚举值：<%= p.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- p.example %>`<% } %> |
+<% if (options.parameters) { %><% options.parameters.sort((a,b)=> a.required ? -1 : 1).forEach(function(p){ %>| <%- p.name %> | <%- p.schema.type %>  | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.schema.default %> | <%- p.description %>。 <% if(p.schema.enum) { %>枚举值：<%= p.schema.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- p.example %>`<% } %> |
+<% }); %><% } %><% if (request) { %><% Object.entries(request.properties).sort((a,b)=> a.required ? -1 : 1).forEach(function([key,p]){ %>| <%- key %> | <% if(p.type) { %><%- p.type %><% } else { %><a href="#<%- p.schema %>"><%- p.schema %></a><% } %> | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.default %> | <%- p.description %>。 <% if(p.enum) { %>枚举值：<%= p.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- p.example %>`<% } %> |
 <% }); %><% } %>
 
 ## 示例代码
