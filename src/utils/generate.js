@@ -9,6 +9,15 @@ const {
   getExampleJson
 } = require('./helper');
 
+const LANGUAGES = {
+  // python: 'Python',
+  // java: 'Java',
+  // go: 'Go',
+  php: 'PHP',
+  csharp: 'C#',
+  node: 'Node.js'
+};
+
 const DIR = join(__dirname, '../../generated');
 
 exports.generate = async ({ language, path, options, tag, components }) => {
@@ -66,22 +75,39 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
     force: true
   });
   // Generate Sidebar
+  const PREFIX = '/reference-new/sdk/v5/';
   await fs.mkdir(DIR, { recursive: true });
-  const sidebar = {};
-  for (const language of languages) {
-    const category = `/reference-new/sdk/${language}/`;
-    sidebar[category] = [
+  const sidebar = {
+    [PREFIX]: [
       {
-        title: language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
+        title: 'SDK 参考',
         collapsable: false,
-        children: [
-          {
-            title: '安装使用',
-            path: category
-          }
-        ]
+        children: []
       }
-    ];
+    ]
+  };
+  for (const language of languages) {
+    const category = `${PREFIX}${language}/`;
+    const sidebarLang = {
+      title:
+        LANGUAGES[language] ||
+        language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
+      path: category,
+      children: [
+        {
+          title: '安装使用',
+          path: category
+        },
+        {
+          title: '用户认证模块',
+          path: `${category}authentication.md`
+        },
+        {
+          title: '管理模块',
+          children: []
+        }
+      ]
+    };
     for (const tag of tags) {
       const subCategory = {
         title: tag.name,
@@ -95,9 +121,10 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
         );
       }
       if (subCategory.children.length > 0) {
-        sidebar[category][0].children.push(subCategory);
+        sidebarLang.children[2].children.push(subCategory);
       }
     }
+    sidebar[PREFIX][0].children.push(sidebarLang);
   }
   await fs.writeFile(
     join(DIR, 'sidebar.json'),
