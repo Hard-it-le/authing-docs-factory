@@ -1,0 +1,28 @@
+```go
+import (
+    "authing-go-sdk/client"
+    "authing-go-sdk/dto"
+
+    "fmt"
+)
+
+func main() {
+    options := client.ManagementClientOptions {
+        AccessKeyId:     "AUTHING_USERPOOL_ID",
+        AccessKeySecret: "AUTHING_USERPOOL_SECRET",
+    }
+
+    client, err := client.NewClient(&options)
+    if err != nil {
+        // The exception needs to be handled by the developer.
+    }
+<% let a=0 %><% let name="" %><%  if(request){name=request.name} %>
+    response := client.<%- fnNameCamel %>(
+    <% if (request) { %>  dto.<%- request.name %> {<% } %>
+    <%  options.parameters.forEach((p)=>{%> <% a++ %>
+        <%-p.name%>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>
+        <% if(a<options.parameters.length){%>,<%}%><%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/go_params', {key,p,models,name}) -%>
+    <%}); %><% }%><% if(request){%>}<%}%>
+  )
+}
+```

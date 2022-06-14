@@ -1,0 +1,21 @@
+```java
+
+import cn.authing.core.mgmt.ManagementClient;
+
+class ManagementClientTest {
+    private static String ACCESS_Key_ID = "AUTHING_USERPOOL_ID";
+    private static String ACCESS_KEY_SECRET = "AUTHING_USERPOOL_SECRET";
+
+    public static void main(String[] args){
+        ManagementClient managementClient = new ManagementClient(ACCESS_Key_ID, ACCESS_KEY_SECRET);
+    <% let a=0 %><% let name="" %><%  if(request){name=request.name} %>
+        managementClient.<%- fnNameCamel %>(
+        <% if (request) { %>  new <%- request.name %>(<% } %>
+        <%  options.parameters.forEach((p)=>{%> <% a++ %>
+            <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>
+            <% if(a<options.parameters.length){%>,<%}%><%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/java_params', {key,p,models,name}) -%>
+        <%}); %><% }%><% if(request){%>)<%}%>
+        ).execute();
+    }
+}
+```
