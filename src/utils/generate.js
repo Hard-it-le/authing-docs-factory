@@ -92,7 +92,7 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
       title:
         LANGUAGES[language] ||
         language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
-      path: category,
+      // path: category,
       children: [
         {
           title: '安装使用',
