@@ -41,7 +41,7 @@ namespace Example
         }
     }
 }
-<% function convertKeyWord(str){ if(str=="namespace"){return "nameSpace"}else{return str}} %>
+<% function convertKeyWord(str){ if(str === "namespace"){return "nameSpace"}else{return str}} %>
 <% function ConvertFirstCharUpper(str){ return str.charAt(0).toUpperCase() + str.slice(1);} -%>
 <% function getParammeterValue(param){
   if(typeof param.example==='undefined'){
