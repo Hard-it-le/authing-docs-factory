@@ -13,7 +13,7 @@ class ManagementClientTest {
     <% let a = 0 %><% let name = "" %><%  if(request) {name = request.name} %>
         <% if (request) { %><%- request.name %> request = new <%- request.name %>();<% } %>
         <%  options.parameters.forEach((p) => {%> <% a++ %>
-        request.set<%- convertFirstCharUpper(p.name) %>(<%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>);<%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/java_params', {key,p,models,name}) -%>
+        request.set<%- convertFirstCharUpper(p.name) %>(<%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.schema.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>);<%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/java_params', {key,p,models,name}) -%>
         <%}); %><% }%><% if(request){%><%}%>
         <%- response.name %> response = managementClient.<%- fnNameCamel %>(request);
         System.out.println(response);

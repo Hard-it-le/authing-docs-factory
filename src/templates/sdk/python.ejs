@@ -8,7 +8,7 @@ management_client = ManagementClient(
 
 data = management_client.<%- fnNameSnake %>(
   <% options.parameters.forEach((p)=>{%>
-      <%- p.name.replace(/([A-Z])/g,(_,$1)=>`_${$1.toLowerCase()}`) %>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}` %>,
+      <%- p.name.replace(/([A-Z])/g,(_,$1)=>`_${$1.toLowerCase()}`) %>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}${p.example??p.schema.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?'"':''}` %>,
   <%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/py_params', {key,p,models}) %>
   <%}); %><% } %>
 )

@@ -22,7 +22,7 @@ func main() {
     response := client.<%- fnNameCamel %>(
     <% if (request) { %>  dto.<%- request.name %> {<% } %>
     <%  options.parameters.forEach((p)=>{%> <% a++ %>
-        <%-p.name%>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>
+        <%-p.name%>: <%- `${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}${p.example??p.schema.default}${p.schema.type==='string'||p.schema?.items?.type==='string'?"\"":''}` -%>
         <% if(a<options.parameters.length){%>,<%}%><%}); %><% if (request) { %><% Object.entries(request.properties).forEach(function([key,p]){ %><%- include('../partial/go_params', {key,p,models,name}) -%>
     <%}); %><% }%><% if(request){%>}<%}%>
   )
