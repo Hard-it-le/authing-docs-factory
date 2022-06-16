@@ -75,28 +75,21 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
     force: true
   });
   // Generate Sidebar
-  const PREFIX = '/reference-new/sdk/v5/';
+  const PREFIX = '/reference-new/sdk-v5/';
   await fs.mkdir(DIR, { recursive: true });
-  const sidebar = {
-    [PREFIX]: [
-      {
-        title: 'SDK 参考',
-        collapsable: false,
-        children: []
-      }
-    ]
-  };
+  const sidebar = [];
   for (const language of languages) {
     const category = `${PREFIX}${language}/`;
     const sidebarLang = {
       title:
         LANGUAGES[language] ||
         language.replace(/^(.)/, (_, $1) => $1.toUpperCase()),
-      // path: category,
+      path: category,
+      redirect: `${category}install.html`,
       children: [
         {
           title: '安装使用',
-          path: category
+          path: `${category}install.md`
         },
         {
           title: '用户认证模块',
@@ -124,7 +117,7 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
         sidebarLang.children[2].children.push(subCategory);
       }
     }
-    sidebar[PREFIX][0].children.push(sidebarLang);
+    sidebar.push(sidebarLang);
   }
   await fs.writeFile(
     join(DIR, 'sidebar.json'),
