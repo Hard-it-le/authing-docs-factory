@@ -108,10 +108,11 @@ exports.generateSidebar = async ({ languages, tags, paths }) => {
         children: []
       };
       const apis = filterApisByTag(paths, tag.name);
-      for (const [path] of apis) {
-        subCategory.children.push(
-          `${category}${tag.path}/${path.replace(/^\/api\/v3\//, '')}`
-        );
+      for (const [path, data] of apis) {
+        subCategory.children.push({
+          title: data?.get?.summary || data?.post?.summary,
+          path: `${category}${tag.path}/${path.replace(/^\/api\/v3\//, '')}`
+        });
       }
       if (subCategory.children.length > 0) {
         sidebarLang.children[2].children.push(subCategory);
