@@ -13,10 +13,10 @@
 
 ## 请求参数
 
-| 名称 | 类型 | 必填 | 默认值 | 描述 |
-| ---- | ---- | ---- | ---- | ---- |
-<% if (options.parameters) { %><% options.parameters.sort((a,b)=> a.required ? -1 : 1).forEach(function(p){ %>| <%- p.name %> | <%- p.schema.type === 'array' ? `${p.schema.items.type}[]` : p.schema.type %>  | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.schema.default %> | <%- p.description %>。 <% if(p.schema.enum) { %>枚举值：<%= p.schema.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- p.example %>`<% } %> |
-<% }); %><% } %><% if (request) { %><% Object.entries(request.properties).sort((a,b)=> a.required ? -1 : 1).forEach(function([key,p]){ %>| <%- key %> | <% if(p.type) {  if (p.type==='array') { if(p.items.type) { %><%- p.items.type %>[]<%  } else {%><a href="#<%- p.items.$ref.replace('#/components/schemas/','') %>"><%- p.items.$ref.replace('#/components/schemas/','') %>[]</a><%} } else {%><%- p.type %><% }} else { %><a href="#<%- p.schema %>"><%- p.schema %></a><% } %> | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.default %> | <%- p.description %>。 <% if(p.enum) { %>枚举值：<%= p.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- typeof p.example === 'object' ? JSON.stringify(p.example) : p.example %>`<% } %> |
+| 名称 | 类型 | 必填 | 默认值 | 描述 | 示例值 |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+<% if (options.parameters) { %><% options.parameters.sort((a,b)=> a.required ? -1 : 1).forEach(function(p){ %>| <%- p.name %> | <%- p.schema.type === 'array' ? `${p.schema.items.type}[]` : p.schema.type %>  | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.schema.default %> | <%- p.description %>。 <% if(p.schema.enum) { %>枚举值：<%= p.schema.enum.map(x=>`\`${x}\``).join(","); %><% } %> | <% if(p.example) { %>`<%- p.example %>`<% } %> |
+<% }); %><% } %><% if (request) { %><% Object.entries(request.properties).sort((a,b)=> a.required ? -1 : 1).forEach(function([key,p]){ %>| <%- key %> | <% if(p.type) {  if (p.type==='array') { if(p.items.type) { %><%- p.items.type %>[]<%  } else {%><a href="#<%- p.items.$ref.replace('#/components/schemas/','') %>"><%- p.items.$ref.replace('#/components/schemas/','') %>[]</a><%} } else {%><%- p.type %><% }} else { %><a href="#<%- p.schema %>"><%- p.schema %></a><% } %> | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.default %> | <%- p.description %>。 <% if(p.enum) { %>枚举值：<%= p.enum.map(x=>`\`${x}\``).join(","); %><% } %> | <% if(p.example) { %>`<%- typeof p.example === 'object' ? JSON.stringify(p.example) : p.example %>`<% } %> |
 <% }); %><% } %>
 
 ## 示例代码
