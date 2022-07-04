@@ -1,0 +1,47 @@
+name: Generate SDK Docs
+
+# 手动生成各语言 SDK 文档产物
+on:
+  workflow_dispatch:
+  # push:
+  #     branches:
+  #         - main
+
+jobs:
+  Typescript:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Download Schema
+        run: curl https://api.authing.cn/openapi-json -o openapi.json
+      - name: Install node_modules
+        run: yarn
+      - name: Build Package
+        run: yarn build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.API_TOKEN_GITHUB }}
+          publish_dir: ./generated
+          publish_branch: temp/dist
+      # - name: Pushes to another repository
+      #   uses: cpina/github-action-push-to-another-repository@main
+      #   env:
+      #       API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      #   with:
+      #       source-directory: 'generated/typescript'
+      #       destination-github-username: 'authing'
+      #       destination-repository-name: 'authing-node-sdk'
+      #       user-email: willin@willin.org
+      #       target-branch: main
