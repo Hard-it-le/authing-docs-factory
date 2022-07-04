@@ -1,5 +1,11 @@
 # Authing Docs Factory
 
+## Introduction / 介绍
+
+通过 Github Actions 触发更新，自动生成文档在 `temp/dist` 分支。
+
+回到开发者文档项目执行更新脚本，即可覆盖最新内容。
+
 ## Development
 
 - Download `openapi.json` to ROOT directory
