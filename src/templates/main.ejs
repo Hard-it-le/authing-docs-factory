@@ -47,6 +47,6 @@
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- |  ---- | ---- | ---- |
-<% Object.entries(model.properties).forEach(function([key,p]){ %>| <%- key %> | <% if(p.type) { %><%- p.type %><% } %> | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.description %>。<% if(p.schema) { %>嵌套类型：<a href="#<%- p.schema %>"><%- p.schema %></a>。<% } %><%- p.maxItems ? `数组长度限制：${p.maxItems}。`: '' %> <% if(p.enum) { %>枚举值：<%= p.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- p.example %>`<% } %>  |
+<% Object.entries(model.properties).forEach(function([key,p]){ %>| <%- key %> | <% if(p.type) { %><%- p.type %><% } %> | <% if(p.required) { %>是<% } else { %>否<% }%> | <%- p.description %>。<% if(p.schema) { %>嵌套类型：<a href="#<%- p.schema %>"><%- p.schema %></a>。<% } %><%- p.maxItems ? `数组长度限制：${p.maxItems}。`: '' %> <% if(p.enum) { %>枚举值：<%= p.enum.map(x=>`\`${x}\``).join(","); %><% } else if(p.example) { %>示例值： `<%- key==='customData' ? JSON.stringify(p.example) : p.example %>`<% } %>  |
 <% }); %>
 <% }); %>
