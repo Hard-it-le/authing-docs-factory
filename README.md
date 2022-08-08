@@ -11,9 +11,9 @@ English | [简体中文](./README-zh_CN.md)
 
 Document Factory for Authing SDK v5.
 
-<div align="center">
+<!-- <div align="center">
   <img width="650" alt="image" src="https://user-images.githubusercontent.com/1890238/183325636-763a692d-77e1-4c41-a09f-10121ea4b006.png">
-</div>
+</div> -->
 
 ## Questions
 
