@@ -1,17 +1,33 @@
-# Authing Docs Factory
+<div align=center>
+  <img width="250" src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg" />
+</div>
 
-## Introduction / 介绍
+<div align="center">
+  <a href="https://forum.authing.cn/" target="_blank"><img src="https://img.shields.io/badge/chat-forum-blue" /></a>
+  <a href="javascript:;"><img src="https://img.shields.io/badge/License-MIT-success" alt="License"></a>
+</div>
 
-通过 Github Actions 触发更新，自动生成文档在 `temp/dist` 分支。
+English | [简体中文](./README-zh_CN.md) 
 
-回到开发者文档项目执行更新脚本，即可覆盖最新内容。
+Document Factory for Authing SDK v5.
 
-## Development
+<div align="center">
+  <img width="650" alt="image" src="https://user-images.githubusercontent.com/1890238/183325636-763a692d-77e1-4c41-a09f-10121ea4b006.png">
+</div>
 
-- Download `openapi.json` to ROOT directory
-- Install dependencies: `yarn`
-- Generator Run: `yarn build`
+## Questions
 
-## Notice
+For questions and support please use the [official forum](https://forum.authing.cn/). The issue list of this repo is exclusively for bug reports and feature requests.
 
-在 mac 系统下将生成文档复制到 docs v2 项目时，注意不要覆盖删除了根目录的安装说明（`README.md`）。
+## Contribution
+
+See [CONTRIBUTING Guide](https://github.com/Authing/.github/blob/main/CONTRIBUTING.md).
+
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2019 Authing
+
+
+
