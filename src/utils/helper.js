@@ -64,6 +64,7 @@ exports.getSchemaModels = (schemaName, schemas) => {
   }
   const result = [];
   const schema = schemas[schemaName];
+  console.log(schemaName);
   Object.entries(schema.properties).forEach(([, opts]) => {
     if (opts.allOf || (opts.items && opts.items.$ref)) {
       const childSchemaName = opts.allOf

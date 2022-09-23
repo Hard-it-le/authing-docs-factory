@@ -24,7 +24,7 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Download Schema
-        run: curl https://api.authing.cn/openapi-json -o openapi.json
+        run: curl https://console.wh.authing-inc.co/openapi-json -o openapi.json
       - name: Install node_modules
         run: yarn
       - name: Build Package
